@@ -53,6 +53,7 @@ ARRIVED_STRING = "Arrived"
 CANCELLED_STRING = "Cancelled"
 NOT_DEPARTED_STRING = "Not departed yet"
 NO_INFORMATION_STRING = "No information for this train now"
+ON_TIME_STRING = "On time"
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     {
@@ -192,6 +193,10 @@ class ViaggiaTrenoSensor(SensorEntity):
                 self._state = ARRIVED_STRING
                 self._unit = None
             else:
-                self._state = res.get("ritardo")
-                self._unit = UnitOfTime.MINUTES
-                self._icon = ICON
+                if res.get("ritartdo") == 0:
+                    self._state = ON_TIME_STRING
+                    self._unit = None
+                else:
+                    self._state = res.get("ritardo")
+                    self._unit = UnitOfTime.MINUTES
+                    self._icon = ICON
