@@ -181,22 +181,21 @@ class ViaggiaTrenoSensor(SensorEntity):
         else:
             for i in MONITORED_INFO:
                 self._attributes[i] = res[i]
-
-            if self.is_cancelled(res):
-                self._state = CANCELLED_STRING
-                self._icon = "mdi:cancel"
-                self._unit = None
-            elif not self.has_departed(res):
-                self._state = NOT_DEPARTED_STRING
-                self._unit = None
-            elif self.has_arrived(res):
-                self._state = ARRIVED_STRING
-                self._unit = None
-            else:
-                if res.get("ritartdo") == 0:
-                    self._state = ON_TIME_STRING
+                if self.is_cancelled(res):
+                    self._state = CANCELLED_STRING
+                    self._icon = "mdi:cancel"
+                    self._unit = None
+                elif not self.has_departed(res):
+                    self._state = NOT_DEPARTED_STRING
+                    self._unit = None
+                elif self.has_arrived(res):
+                    self._state = ARRIVED_STRING
                     self._unit = None
                 else:
-                    self._state = res.get("ritardo")
-                    self._unit = UnitOfTime.MINUTES
-                    self._icon = ICON
+                    if res.get("ritartdo") == 0:
+                        self._state = ON_TIME_STRING
+                        self._unit = None
+                    else:
+                        self._state = res.get("ritardo")
+                        self._unit = UnitOfTime.MINUTES
+                        self._icon = ICON
